@@ -4,15 +4,33 @@
 -- CoM visuals table: ziken
 -- CoM script adaptation: Dimeyne
 -- Снятие брони с трупов.
+-- CoC 1.4.22 adaptation: RenanMsV
 ----------------------
 
 -- Mod configs. Setup as you like --
-dropchance = 100 -- drop chance in %
-armorDurability = { min = 10, max = 45} -- armor durability in % 
-helmetDurability = { min = 10, max = 35} -- helmet durability in %
+dropchance = 100 -- outfit and helmet drop chance in % (from 0 to 100)
+outfit_Condition = { -- setup outfit durability values
+	armor = { min = 10, max = 45}, -- default armor durability in % (from 0 to 100) 
+	helmet = { min = 10, max = 35} -- default helmet durability in % (from 0 to 100)
+}
+outfit_Condition_Based_On_Rank = true -- if so experienced stalkers will drop outfits with a better condition
+rank_condition_table = { -- setup here the durability based on the npc rank, will not work if outfit_Condition_Based_On_Rank not enabled 
+	novice = 1, -- default 45%
+	trainee = 1.1, -- up to 49.5%
+	experienced = 1.2, -- up to 54%
+	professional = 1.3, -- up to 58.5%
+	veteran = 1.4, -- up to 63%
+	expert = 1.5, -- up to 67.5%
+	master = 1.6, -- up to 72%
+	legend = 1.7 -- up to 76.5%
+} -- 1 = default condition by config. 2 = double default condition. So if default max is 45% then legend stalkers will be 2x or 90%
 
 debugMessages = true -- debug messages (for developers)
 -- end of configs --
+
+-- Developer Stats
+addon = { version = "0.0.1", description = "Adds lootable outfits and headgear on the corpses of stalkers.", author = "Author: Shoker, CoM visuals tabble: ziken, CoM script adaptation: Dimeyne, CoC 1.4.22 adaptation: RenanMsV"}
+-- end of dev stats
 
 local curent_outfit = {}
 local curent_helmet = {}
@@ -20,6 +38,9 @@ local curent_helmet = {}
 -- Таблица визуалов
 -- ВИЗУАЛ = {"СЕКЦИЯ БРОНИ", "СЕКЦИЯ ШЛЕМА"}
 -- Если шлем не нужен, то ничего не пишем.
+-- To setup new outfits
+-- stalker_visual_name = {"armor_name", "helmet_name"}
+-- The helmet is not required.
 
 function on_game_start()
 	RegisterScriptCallback("npc_on_death_callback", npc_on_death)
@@ -45,7 +66,7 @@ stalker_bandit_3_face_2 			= {"trenchcoat_brown_outfit"},
 stalker_bandit_3_face_3 			= {"trenchcoat_brown_outfit"},
 stalker_bandit_3_mask 				= {"trenchcoat_brown_outfit", "helm_respirator"},
 stalker_bandit_4   					= {"trenchcoat_outfit"},
-stalker_bandit_5   					= {"army_outfit", "helm_tactic"},
+stalker_bandit_5   					= {"military_outfit", "helm_tactic"},
 stalker_bandit_5_gasmask   			= {"bandit_specops_outfit", "helm_battle"},
 stalker_bandit_a   					= {"bandit_novice_outfit"},
 stalker_bandit_exo 					= {"bandit_exo_outfit"},
@@ -117,10 +138,10 @@ stalker_dolg3b       				= {"dolg_heavy_outfit", "helm_battle"},
 stalker_dolg4a       				= {"dolg_exo_outfit"},
 stalker_dolg4b       				= {"dolg_exo_outfit"},
 stalker_dolg4c      	 			= {"dolg_exo_outfit"},
-stalker_dolgexo_4    				= {"dolg_radiation_outfit"},
-stalker_dolgexo4a    				= {"dolg_radiation_outfit"},
-stalker_dolgexo4b    				= {"dolg_radiation_outfit"},
-stalker_dolgexo4c    				= {"dolg_radiation_outfit"},
+stalker_dolgexo_4    				= {"dolg_scientific_outfit"},
+stalker_dolgexo4a    				= {"dolg_scientific_outfit"},
+stalker_dolgexo4b    				= {"dolg_scientific_outfit"},
+stalker_dolgexo4c    				= {"dolg_scientific_outfit"},
 stalker_dolggas_2    				= {"dolg_outfit", "helm_respirator"},
 stalker_dolggas2a 	 				= {"dolg_outfit", "helm_respirator"},
 
@@ -196,7 +217,7 @@ stalker_mercen2b_mask 				= {"merc_outfit", "helm_respirator"},
 stalker_mercen2c_mask 				= {"merc_outfit", "helm_respirator"},
 stalker_mercenary3   				= {"merc_scientific_outfit"},
 stalker_mercenary4   				= {"merc_scientific_outfit"},
-stalker_mercexo4a    				= {"merc_radiation_outfit"},
+stalker_mercexo4a    				= {"merc_scientific_outfit"},
 stalker_mercexo_4    				= {"merc_exo_outfit"},
 
 ----- «Монолит» -----
@@ -217,8 +238,8 @@ stalker_monolith2 					= {"monolith_outfit", "helm_respirator"},
 stalker_monolith2_gp5 				= {"monolith_outfit", "helm_respirator"},
 stalker_monolith2a_old 				= {"monolith_outfit", "helm_respirator"},
 stalker_monolith2b_old 				= {"monolith_outfit", "helm_respirator"},
-stalker_monolith3a 					= {"monolith_radiation_outfit"},
-stalker_monolith3b 					= {"monolith_radiation_outfit"},
+stalker_monolith3a 					= {"monolith_scientific_outfit"},
+stalker_monolith3b 					= {"monolith_scientific_outfit"},
 stalker_monolith4a 					= {"monolith_exo_outfit"},
 stalker_monolith4b 					= {"monolith_exo_outfit"},
 
@@ -281,8 +302,8 @@ stalker_neutral_2_merc 				= {"stalker_outfit", "helm_m40"},
 stalker_neutral_2_old 				= {"stalker_outfit", "helm_respirator"},
 stalker_neutral_2mask1 				= {"stalker_outfit"},
 stalker_neutral_2mask2 				= {"stalker_outfit"},
-stalker_neutral_3 					= {"radiation_outfit"},
-stalker_neutral_3_face_1 			= {"radiation_outfit"},
+stalker_neutral_3 					= {"scientific_outfit"},
+stalker_neutral_3_face_1 			= {"scientific_outfit"},
 stalker_neutral_4 					= {"exo_outfit"},
 stalker_neutral_a 					= {"novice_outfit"},
 stalker_neutral_exo_proto 			= {"stalker_outfit"},
@@ -404,10 +425,10 @@ stalker_prizrak 					= {"stalker_outfit"},
 ----- Military ------
 stalker_military_exo 				= {"military_exo_outfit"},
 stalker_skat9m 						= {"commander_outfit"},
-stalker_soldier_1 					= {"army_outfit"},
-stalker_soldier_1_face_1 			= {"army_outfit"},
-stalker_soldier_2 					= {"army_outfit", "helm_tactic"},
-stalker_soldier_2_face_1 			= {"army_outfit"},
+stalker_soldier_1 					= {"military_outfit"},
+stalker_soldier_1_face_1 			= {"military_outfit"},
+stalker_soldier_2 					= {"military_outfit", "helm_tactic"},
+stalker_soldier_2_face_1 			= {"military_outfit"},
 stalker_soldier_3 					= {"specops_outfit", "helm_battle"},
 stalker_soldier_3_beret 			= {"specops_outfit"},
 stalker_soldier_3_face_1 			= {"specops_outfit"},
@@ -415,12 +436,12 @@ stalker_soldier_4 					= {"military_outfit", "helm_battle"},
 stalker_soldier_5 					= {"military_outfit", "helm_respirator"},
 stalker_soldier_5_beret 			= {"military_outfit"},
 stalker_soldier_ecolog_face_1 		= {"military_outfit"},
-stalker_soldier1b 					= {"army_outfit"},
-stalker_soldier1c 					= {"army_outfit"},
-stalker_soldier1d 					= {"army_outfit"},
-stalker_soldier1e 					= {"army_outfit"},
-stalker_soldier1f 					= {"army_outfit"},
-stalker_soldier1g 					= {"army_outfit"},
+stalker_soldier1b 					= {"military_outfit"},
+stalker_soldier1c 					= {"military_outfit"},
+stalker_soldier1d 					= {"military_outfit"},
+stalker_soldier1e 					= {"military_outfit"},
+stalker_soldier1f 					= {"military_outfit"},
+stalker_soldier1g 					= {"military_outfit"},
 stalker_soldier3a_beret 			= {"specops_outfit"},
 stalker_soldier3b_beret 			= {"specops_outfit"},
 stalker_soldier3c_beret 			= {"specops_outfit"},
@@ -1158,7 +1179,7 @@ nil
 479]]
 --}
 
---[[ from azazel - create outfit based on stalker visual type
+--[[ from azazel_mode.script - create outfit based on stalker visual type
 local section = se_obj:section_name()
 if (string.find(section,"_4")) then 
 	local f = {
@@ -1231,91 +1252,90 @@ end
 -- Умер сталкер
 function npc_on_death(npc)
 	local rnd_value = math.random(1,99)
-	if rnd_value > dropchance then return end -- if drop chance higher than random value between 1,99
- 	
- 	-- show message
- 	if debugMessages then -- show debug messages on screen if set to
- 		local armor, helmet = get_outfit_sections(npc:get_visual_name())
- 		armor = armor or "null"
- 		helmet = helmet or "null"
-		--xr_sound.set_sound_play(actor:id(), "pda_news")
-		debug_sc("Dead stalker: " .. npc:character_name() .. " . This %c[255,255,0,0]" .. npc:character_community() .. "%c[default] stalker did drop his armor / helmet. Stalker visual name : '" .. alun_utils.str_explode(npc:get_visual_name(),"\\")[3] .. "' . And so this stalker should spawn the: '" .. armor .. "' armor and '" .. helmet .. "' helmet.")
-	end
+	if rnd_value > dropchance then return end -- if drop chance higher than random value between 1,99 exit
 
 	local rank = ranks.get_obj_rank_name(npc) -- get dead npc rank (novice, professional...)
+	local rank_mult = get_rank_condition(rank)
 	local comm = npc:character_community() -- get dead npc faction (dolg, bandit...)
 	local coef = get_comb_coeff(rank,comm)^0.44 -- get dead npc coeff based on rank and faction
 	local visual = npc:get_visual_name() -- get dead npc outfit name
-	local outfit_section, helmet_section = get_outfit_sections(visual) -- get which outfit to spawn based in the npc outfit name
+	local outfit_section, helmet_section, v_name = get_outfit_sections(visual) -- get which outfit to spawn based in the npc outfit name
+
+	debug_sc("Dead stalker: " .. npc:character_name() .. " . This %c[255,255,0,0]" .. comm .. "%c[default] stalker did drop his armor / helmet. Stalker visual name : '" .. (v_name or "none") .. "' . And so this stalker should spawn the: '" .. (outfit_section or "none") .. "' armor and '" .. (helmet_section or "none") .. "' helmet. Rank multiplier: " .. rank .. " = " .. game.translate_string(rank_mult)) -- debug dead stalkers
+
 	if outfit_section then -- if outfit armor then
 		local se_outfit = alife():create(outfit_section, npc:position(), npc:level_vertex_id(), npc:game_vertex_id(), npc:id()) -- creating armor in the npc's inventory
 		curent_outfit[se_outfit.id] = coef -- set coef in the var curent_outfit for later use
-		update_outfit() -- calls update outfit function
+		update_outfit(rank_mult) -- calls update outfit function
 	end
 	if helmet_section then -- if outfit helmet then
 		local se_helmet = alife():create(helmet_section, npc:position(), npc:level_vertex_id(), npc:game_vertex_id(), npc:id()) -- creating helmet in the npc's inventory
 		curent_helmet[se_helmet.id] = coef -- set coef in the var curent_helmet for later use
-		update_helmet() -- calls update helmet function
+		update_helmet(rank_mult) -- calls update helmet function
 	end
 end
 
 -- Получим секцию брони и шлема
+-- get outfit and helmet based on the visual name
 function get_outfit_sections(visual)
 	local s_name = alun_utils.str_explode(visual,"\\") -- split outfit name by \\
 	local v_name = s_name[3] -- get the name
 	local t_vis = visuals[v_name] -- find outfit and helmet based on the name
 	if t_vis then
-		return t_vis[1], t_vis[2] -- return results if they exist
+		return t_vis[1], t_vis[2], v_name -- return results if they exist
 	end
 end
 
 -- update
-function update_outfit() -- updating outfit armor
+function update_outfit(rank_mult) -- updating outfit armor
 	local function actor_on_update()
 		local param = false
 		for k,v in pairs(curent_outfit) do -- for value key v in current_outfit armor | k: 30859 v: 1 
-			local outfit_obj = level.object_by_id(k)
-			if outfit_obj then
-				condition = mean_random(armorDurability["min"],armorDurability["max"],v,1)/100
-				outfit_obj:set_condition(condition)
-				debug_sc("Spawned Armor condition: " .. game.translate_string(condition) * 100 .. "%")
-				--outfit_obj:set_condition(mean_random(armorDurability["min"],armorDurability["max"],v,1)/100)
-				curent_outfit[k] = nil
-				param = true
-			elseif param == true then
+			local outfit_obj = level.object_by_id(k) -- get object handle by id
+			if outfit_obj then -- if object defined
+				condition = mean_random(outfit_Condition["armor"]["min"],outfit_Condition["armor"]["max"],v,1)/100 * (outfit_Condition_Based_On_Rank and rank_mult or 1) -- get random condition
+				outfit_obj:set_condition(condition) -- set item condition
+				debug_sc("Spawned Armor condition: " .. game.translate_string(condition) * 100 .. "%") -- debug condition
+				--outfit_obj:set_condition(mean_random(outfit_Condition["armor"]["min"],outfit_Condition["armor"]["max"],v,1)/100)
+				curent_outfit[k] = nil -- delete curent_outfit [id] variable
+				param = true -- set param as true
 				UnregisterScriptCallback("actor_on_update",actor_on_update)
+			elseif param == true then -- if param true
+				UnregisterScriptCallback("actor_on_update",actor_on_update) -- unregister callback after done (seems will never run)
 				return
 			end
 		end
 	end
-RegisterScriptCallback("actor_on_update",actor_on_update)
+RegisterScriptCallback("actor_on_update",actor_on_update) -- register callback
 end
 
-function update_helmet()
+function update_helmet(rank_mult) -- updating outfit armor
 	local function actor_on_update()
 		local param = false
-		for k,v in pairs(curent_helmet) do
-			local helmet_obj = level.object_by_id(k)
-			if helmet_obj then
-				condition = mean_random(helmetDurability["min"],helmetDurability["max"],v,1)/100
-				helmet_obj:set_condition(condition)
-				debug_sc("Spawned Helmet condition: " .. game.translate_string(condition) * 100 .. "%")
-				--helmet_obj:set_condition(mean_random(helmetDurability["min"],helmetDurability["max"],v,1)/100)
-				curent_helmet[k] = nil
-				param = true
-			elseif param == true then
-				UnregisterScriptCallback("actor_on_update",actor_on_update)
+		for k,v in pairs(curent_helmet) do -- for value key v in curent_helmet helmet | k: 30859 v: 1 
+			local helmet_obj = level.object_by_id(k) -- get object handle by id
+			if helmet_obj then -- if object defined
+				condition = mean_random(outfit_Condition["armor"]["min"],outfit_Condition["armor"]["max"],v,1)/100 * (outfit_Condition_Based_On_Rank and rank_mult or 1) -- get random condition
+				helmet_obj:set_condition(condition) -- set item condition
+				debug_sc("Spawned Helmet condition: " .. game.translate_string(condition) * 100 .. "%") -- debug condition
+				--helmet_obj:set_condition(mean_random(outfit_Condition["helmet"]["min"],outfit_Condition["helmet"]["max"],v,1)/100)
+				curent_helmet[k] = nil -- delete curent_helmet [id] variable
+				param = true -- set param as true
+				UnregisterScriptCallback("actor_on_update",actor_on_update) -- unregister callback
+			elseif param == true then -- if param true
+				UnregisterScriptCallback("actor_on_update",actor_on_update) -- unregister callback after done (seems will never run)
 				return	
 			end
 		end
 	end
-RegisterScriptCallback("actor_on_update",actor_on_update)
+RegisterScriptCallback("actor_on_update",actor_on_update) -- register callback
 end
 
 --утилиты
-function mean_random(index_min,index_max,mean_index,left_power,right_power,flag)
-	local index_mean = mean_index or 0.5
-	if (index_mean >= 0) and (index_mean <= 1) then
+-- generate a random condition value
+function mean_random(index_min,index_max,mean_index,left_power,right_power,flag) 
+	local index_mean = mean_index or 0.5 
+	if (index_mean >= 0) and (index_mean <= 1) then 
 		index_mean = (index_max-index_min)*index_mean + index_min
 		local mean_down, mean_up = math.floor(index_mean), math.ceil(index_mean)
 		local d_mean_down, d_mean_up = index_mean - mean_down, mean_up - index_mean
@@ -1357,24 +1377,32 @@ end
 
 
 function get_comb_coeff(rank,comm)
-	--local rank_coeffs_table = {novice = 0.3, trainee = 0.4, experienced = 0.5, professional = 0.6, veteran = 0.7, expert = 0.8, master = 0.9, legend = 1}
-	local rank_coeffs_table = {novice = 1, trainee = 1, experienced = 1, professional = 1, veteran = 1, expert = 1, master = 1, legend = 1}
-	local comm_coeffs_table = {zombied = 0.4, ecolog = 0.9, bandit = 0.8, freedom = 0.9, stalker = 0.9, clearsky = 1, dolg = 1, killer = 1, army = 1, monolith = 1}
-	local rank_coeff = rank_coeffs_table[rank] or 0
-	local comm_coeff = comm_coeffs_table[comm] or 0
-	return rank_coeff * comm_coeff
+	local rank_coeffs_table = {novice = 0.3, trainee = 0.4, experienced = 0.5, professional = 0.6, veteran = 0.7, expert = 0.8, master = 0.9, legend = 1} -- rank coeff
+	local comm_coeffs_table = {zombied = 0.4, ecolog = 0.9, bandit = 0.8, freedom = 0.9, stalker = 0.9, clearsky = 1, dolg = 1, killer = 1, army = 1, monolith = 1} -- faction coeff
+	local rank_coeff = rank_coeffs_table[rank] or 0 -- rank coeff equals table or 0
+	local comm_coeff = comm_coeffs_table[comm] or 0 -- faction coeff equals table or 0
+	return rank_coeff * comm_coeff -- return rank coeff * faction coeff
 end
 
-function on_game_load()
-	debug_sc("Outfit Marauder Loaded and Running...")
-	debug_sc(debug_vars())
+function get_rank_condition(rank)
+	return rank_condition_table[rank] or 1
 end
 
-function debug_sc(text)
+function on_game_load() -- this will be executed once on game load 
+	debug_sc(
+		"Version %c[255,255,0,0]" .. addon["version"] .. "%c[default] Loaded and Running...\\n"..
+		addon["description"] .. "\\n" ..
+		debug_vars() -- debug config and extra vars from debug_vars function
+	) -- debug
+end
+
+function debug_sc(text, icon) -- debug function
 	if not debugMessages then return end
-	db.actor:give_game_news("Outfit Marauder >> Debug Message", text, "", 0, 50000)
+	--db.actor:give_game_news("Outfit Marauder >> Debug Message", text, "", 0, 50000) -- debug message on screen
+	news_manager.send_tip(db.actor, "Outfit Marauder >> Debug Message" .. "\\n" .. text, nil, "tourist", 50000)
+	alun_utils.printf(("Outfit Marauder >> Debug Message" .. "\\n" .. text))
 end
 
-function debug_vars()
-	return "Variables: DropChance = " .. tostring(dropchance) .. ". Durability: Armor (min " .. armorDurability["min"] .. ", max " .. armorDurability["max"] .. "), Helmet: (min " .. helmetDurability["min"] .. ", max " .. helmetDurability["max"] .. ")"  
+function debug_vars() -- return config and extra vars as strings
+	return "Configs: DropChance = " .. tostring(dropchance) .. "%. Durability: Armor (min " .. outfit_Condition["armor"]["min"] .. "%, max " .. outfit_Condition["armor"]["max"] .. "%), Helmet: (min " .. outfit_Condition["helmet"]["min"] .. "%, max " .. outfit_Condition["helmet"]["max"] .. "%)" .. (outfit_Condition_Based_On_Rank and ". Rank multiplier: Enabled" or "Rank multiplier: Disabled")  
 end
