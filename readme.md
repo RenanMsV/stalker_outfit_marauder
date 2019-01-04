@@ -80,7 +80,7 @@ How to add new outfits:
 To setup new outfits open the outfit_marauder.script with any text editor, and include values in the visuals variable. Example below:
 -- stalker_visual_name = {"armor_name", "helmet_name"}
 -- The helmet is not required.
--- Also if its a new outfit or helmet (non vanilla) you need to add to the gamedata/configs/misc/death_generic.ltx so the game will keep this item in the npc invemtory after death. If you dont the game will randomly remove those outfits or helmets from npc's inventory. Making this mod kinda usefull.
+-- Also if its a new outfit or helmet (non vanilla) you need to add to the gamedata/configs/misc/death_generic.ltx so the game will keep this item in the npc inventory after death. If you dont the game will randomly remove those outfits or helmets from npc's inventory. Making this mod kinda useless.
 
 No new game required.
 
