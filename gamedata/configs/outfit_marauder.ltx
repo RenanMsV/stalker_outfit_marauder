@@ -1,0 +1,25 @@
+; This is the config file for outfit marauder mod
+; The addon makes it possible to pick up armors and helmets when looting NPC corpses.The state of things depends on the faction and rank of the deceased.
+; For Call of Chernobyl 1.4.22
+; CoC 1.4.22 by RenanMsV
+
+[global_config]
+	dropchance = 25 ;outfit and helmet drop chance in % (from 0 to 100)
+	outfit_Condition_Based_On_Rank = true ;if so experienced stalkers will drop outfits with a better condition
+	debugMessages = false ;debug messages (for developers)
+[outfit_condition] ;default armor durability in % (from 0 to 100)
+	min = 10
+	max = 45
+[helmet_condition] ;default helmet durability in % (from 0 to 100)
+	min = 10
+	max = 35
+[rank_condition_table] ;setup here the durability based on the npc rank, will not work if outfit_Condition_Based_On_Rank not enabled. 1 = default by config, 2 = 2x more
+	novice = 1
+	trainee = 1.1
+	experienced = 1.2
+	professional = 1.3
+	veteran = 1.4
+	expert = 1.5
+	master = 1.6
+	legend = 1.7
+	
