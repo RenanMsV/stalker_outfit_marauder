@@ -24,11 +24,11 @@ How to install :
 Copy and replace this mod's gamedata folder into your game's gamedata folder.
 For this mod to work with mods that change the gamedata/configs/misc/death_generic.ltx file you need to add those lines to this file (in the [keep_items] section):
 
-novice outfit = true
+novice_outfit = true
 banditmerc_outfit = true
-trenchcoat_brown_outfit = true
+trenchcoat_outfit = true
 bandit_novice_outfit = true
-merc_stalker_outfit = true
+merc_outfit = true
 helm_respirator = true
 svoboda_light_outfit = true
 dolg_exo_outfit = true
@@ -36,44 +36,35 @@ scientific_outfit = true
 cs_light_novice_outfit = true
 cs_medium_outfit = true
 helm_hardhat = true
-trenchcoat_outfit = true
 helm_m40 = true
 svoboda_exo_outfit = true
 dolg_scientific_outfit = true
 stalker_outfit = true
-ecolog_outfit_white = true
-merc_outfit = true
 ecolog_outfit_orange = true
 dolg_outfit = true
 exo_outfit = true
-m />merc exo_outfit = true
+monolith_outfit = true
+merc_exo_outfit = true
 cs_light_outfit = true
 svoboda_scientific_outfit = true
 dolg_novice_outfit = true
 cs_novice_outfit = true
-cs_stalker_outfit = true
 military_outfit = true
 ecolog_outfit_green = true
-m />dolg heavy_outfit = true
+monolith_scientific_outfit = true
+dolg_heavy_outfit = true
 helm_battle = true
-exolight_outfit = true
-cs_scientific_outfit = true
-commander_outfit = true
-bandit_specops_outfit = true
-ecolog_outfit_blue = true
 military_exo_outfit = true
 bandit_exo_outfit = true
 svoboda_novice_outfit = true
-m />merc_scientific_outfit = true
-svoboda_exolight_outfit = true
+monolith_exo_outfit = true
+merc_scientific_outfit = true
 specops_outfit = true
 cs_heavy_outfit = true
 ecolog_guard_outfit = true
 helm_tactic = true
 svoboda_heavy_outfit = true
 cs_exo_outfit = true
-barmerc_outfit = true
-ecolog_outfit_yello = true
 
 How to add new outfits:
 
