@@ -1,5 +1,7 @@
+Help to develop it : https://gitlab.com/RenanMsV/stalker_outfit_marauder
+
 ----------------------
--- File:   Outfit Marauder
+-- File: Outfit Marauder
 -- Author: Shoker
 -- CoM visuals table: ziken
 -- CoM script adaptation: Dimeyne
@@ -12,15 +14,17 @@ For Call of Chernobyl 1.4.22
 
 How to config this mod (change drop chance etc...):
 
-	Edit the gamedata/configs/outfit_marauder.
-	The default drop chance is 25%.
+Edit the gamedata/configs/outfit_marauder.ltx
+The default drop chance is 25%.
+
+Item conditions based by the NPC rank (novice, experienced, legend) are enabled by default. So experienced stalker will drop outfits with a better condition. You can disable it in the config.
 
 How to install :
 
 Copy and replace this mod's gamedata folder into your game's gamedata folder.
 For this mod to work with mods that change the gamedata/configs/misc/death_generic.ltx file you need to add those lines to this file (in the [keep_items] section):
 
-novice_outfit  = true
+novice outfit = true
 banditmerc_outfit = true
 trenchcoat_brown_outfit = true
 bandit_novice_outfit = true
@@ -42,8 +46,7 @@ merc_outfit = true
 ecolog_outfit_orange = true
 dolg_outfit = true
 exo_outfit = true
-monolith_outfit = true
-merc_exo_outfit = true
+m />merc exo_outfit = true
 cs_light_outfit = true
 svoboda_scientific_outfit = true
 dolg_novice_outfit = true
@@ -51,8 +54,7 @@ cs_novice_outfit = true
 cs_stalker_outfit = true
 military_outfit = true
 ecolog_outfit_green = true
-monolith_scientific_outfit = true
-dolg_heavy_outfit = true
+m />dolg heavy_outfit = true
 helm_battle = true
 exolight_outfit = true
 cs_scientific_outfit = true
@@ -62,8 +64,7 @@ ecolog_outfit_blue = true
 military_exo_outfit = true
 bandit_exo_outfit = true
 svoboda_novice_outfit = true
-monolith_exo_outfit = true
-merc_scientific_outfit = true
+m />merc_scientific_outfit = true
 svoboda_exolight_outfit = true
 specops_outfit = true
 cs_heavy_outfit = true
@@ -80,3 +81,13 @@ To setup new outfits open the outfit_marauder.script with any text editor, and i
 -- stalker_visual_name = {"armor_name", "helmet_name"}
 -- The helmet is not required.
 -- Also if its a new outfit or helmet (non vanilla) you need to add to the gamedata/configs/misc/death_generic.ltx so the game will keep this item in the npc invemtory after death. If you dont the game will randomly remove those outfits or helmets from npc's inventory. Making this mod kinda usefull.
+
+No new game required.
+
+Changelog:
+
+You can now fully config the mod, such as drop chance, item conditions, debug enabled, etc...
+
+New debug option (for developers, or for you to test if your configs are correct and if the mod is working).
+
+New outfits based in the Vanilla version 1.4.22. You can add new outfits from mods.
