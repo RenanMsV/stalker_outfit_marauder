@@ -1,13 +1,11 @@
-Help to develop it : https://gitlab.com/RenanMsV/stalker_outfit_marauder
-
-----------------------
--- File: Outfit Marauder
--- Author: Shoker
--- CoM visuals table: ziken
--- CoM script adaptation: Dimeyne
--- Ñíÿòèå áðîíè ñ òðóïîâ.
--- CoC 1.4.22 adaptation: RenanMsV
-----------------------
+    ----------------------
+    -- File: Outfit Marauder
+    -- Author: Shoker
+    -- CoM visuals table: ziken
+    -- CoM script adaptation: Dimeyne
+    -- Ñíÿòèå áðîíè ñ òðóïîâ.
+    -- CoC 1.4.22 adaptation: RenanMsV
+    ----------------------
 
 The addon makes it possible to pick up armors and helmets when looting NPC corpses.The state of things depends on the faction and rank of the deceased.
 For Call of Chernobyl 1.4.22
@@ -19,11 +17,34 @@ The default drop chance is 25%.
 
 Item conditions based by the NPC rank (novice, experienced, legend) are enabled by default. So experienced stalker will drop outfits with a better condition. You can disable it in the config.
 
+```ini
+[global_config]
+	dropchance = 25 ;outfit and helmet drop chance in % (from 0 to 100)
+	outfit_Condition_Based_On_Rank = true ;if so experienced stalkers will drop outfits with a better condition
+	debugMessages = false ;debug messages (for developers)
+[outfit_condition] ;default armor durability in % (from 0 to 100)
+	min = 10
+	max = 45
+[helmet_condition] ;default helmet durability in % (from 0 to 100)
+	min = 10
+	max = 35
+[rank_condition_table] ;setup here the durability based on the npc rank, will not work if outfit_Condition_Based_On_Rank not enabled. 1 = default by config, 2 = 2x more
+	novice = 1
+	trainee = 1.1
+	experienced = 1.2
+	professional = 1.3
+	veteran = 1.4
+	expert = 1.5
+	master = 1.6
+	legend = 1.7
+```
+
 How to install :
 
 Copy and replace this mod's gamedata folder into your game's gamedata folder.
 For this mod to work with mods that change the gamedata/configs/misc/death_generic.ltx file you need to add those lines to this file (in the [keep_items] section):
 
+```ini
 novice_outfit = true
 banditmerc_outfit = true
 trenchcoat_outfit = true
@@ -65,13 +86,14 @@ ecolog_guard_outfit = true
 helm_tactic = true
 svoboda_heavy_outfit = true
 cs_exo_outfit = true
+```
 
 How to add new outfits:
 
 To setup new outfits open the outfit_marauder.script with any text editor, and include values in the visuals variable. Example below:
--- stalker_visual_name = {"armor_name", "helmet_name"}
--- The helmet is not required.
--- Also if its a new outfit or helmet (non vanilla) you need to add to the gamedata/configs/misc/death_generic.ltx so the game will keep this item in the npc inventory after death. If you dont the game will randomly remove those outfits or helmets from npc's inventory. Making this mod kinda useless.
+  - stalker_visual_name = {"armor_name", "helmet_name"}
+  - The helmet is not required.
+  - Also if its a new outfit or helmet (non vanilla) you need to add to the gamedata/configs/misc/death_generic.ltx so the game will keep this item in the npc inventory after death. If you dont the game will randomly remove those outfits or helmets from npc's inventory. Making this mod kinda useless.
 
 No new game required.
 
