@@ -3,7 +3,6 @@
 -- Author: Shoker
 -- CoM visuals table: ziken
 -- CoM script adaptation: Dimeyne
--- Снятие брони с трупов.
 -- CoC 1.4.22 adaptation: RenanMsV
 ----------------------
 
@@ -36,9 +35,6 @@ local addon = { version = "0.0.1", description = "Adds lootable outfits and head
 local curent_outfit = {}
 local curent_helmet = {}
 
--- Таблица визуалов
--- ВИЗУАЛ = {"СЕКЦИЯ БРОНИ", "СЕКЦИЯ ШЛЕМА"}
--- Если шлем не нужен, то ничего не пишем.
 -- To setup new outfits
 -- stalker_visual_name = {"armor_name", "helmet_name"}
 -- The helmet is not required.
@@ -50,7 +46,6 @@ function on_game_start()
 end
 
 local visuals = {
------ Бандиты -----
 ----- Bandits -----
 stalker_band_2_mask 				= {"banditmerc_outfit", "helm_m40"},
 stalker_band2a_mask 				= {"banditmerc_outfit", "helm_m40"},
@@ -108,7 +103,6 @@ stalker_bandita1   					= {"bandit_novice_outfit"},
 stalker_bandita2   					= {"bandit_novice_outfit"},
 stalker_bandita3   					= {"bandit_novice_outfit"},
 
----- «Долг» ----
 ----- Duty -----
 stalker_do_balon_3					= {"dolg_outfit"},
 stalker_do_komandir					= {"dolg_outfit"},
@@ -147,7 +141,6 @@ stalker_dolgexo4c    				= {"dolg_scientific_outfit"},
 stalker_dolggas_2    				= {"dolg_outfit", "helm_respirator"},
 stalker_dolggas2a 	 				= {"dolg_outfit", "helm_respirator"},
 
------ «Учёные» -----
 ---- Ecologists ----
 stalker_ecolog 						= {"ecolog_outfit_orange"},
 stalker_ecolog_blue 				= {"ecolog_outfit_orange"},
@@ -158,7 +151,6 @@ stalker_ecolog_tookarev 			= {"ecolog_outfit_green"},
 stalker_ecolog_white 				= {"ecolog_outfit_orange"},
 stalker_ecolog_yellow 				= {"ecolog_outfit_orange"},
 
------ «Свобода» -----
 ------ Freedom ------
 stalker_free_0 						= {"svoboda_scientific_outfit"},
 stalker_free0a 						= {"svoboda_scientific_outfit"},
@@ -199,7 +191,6 @@ stalker_freedom5b 					= {"svoboda_exo_outfit"},
 stalker_sv_balon_1 					= {"svoboda_light_outfit"},
 stalker_sv_leader 					= {"svoboda_light_outfit"},
 
------ «Наёмники» -----
 ----- Mercenaries ----
 stalker_ki_head_2 					= {"merc_outfit"},
 stalker_merc_2       				= {"merc_outfit", "helm_m40"},
@@ -222,7 +213,6 @@ stalker_mercenary4   				= {"merc_scientific_outfit"},
 stalker_mercexo4a    				= {"merc_scientific_outfit"},
 stalker_mercexo_4    				= {"merc_exo_outfit"},
 
------ «Монолит» -----
 ----- Monolith ------
 stalker_monolith_1 					= {"monolith_scientific_outfit"},
 stalker_monolith_1_face_1 			= {"monolith_scientific_outfit"},
@@ -245,7 +235,6 @@ stalker_monolith3b 					= {"monolith_scientific_outfit"},
 stalker_monolith4a 					= {"monolith_exo_outfit"},
 stalker_monolith4b 					= {"monolith_exo_outfit"},
 
------- «Чистое небо» -----
 -------- Clear Sky -------
 stalker_nebo_1       				= {"cs_light_novice_outfit"},
 stalker_nebo_2       				= {"cs_light_outfit", "helm_hardhat"},
@@ -255,7 +244,7 @@ stalker_nebo_2_face_4 				= {"cs_light_outfit"},
 stalker_nebo_3       				= {"cs_medium_outfit", "helm_hardhat"},
 stalker_nebo_a		 				= {"cs_medium_outfit", "helm_hardhat"},
 stalker_nebo_b       				= {"cs_heavy_outfit"},
-stalker_nebo_exo_1   				= {"cs_exo_outfit"},
+stalker_nebo_exo_1   				= {"exo_outfit"},
 stalker_nebo_r		 				= {"cs_novice_outfit"},
 stalker_nebo_r_gas   				= {"cs_novice_outfit", "helm_respirator"},
 stalker_nebo_r_mask  				= {"cs_novice_outfit", "helm_respirator"},
@@ -277,7 +266,6 @@ stalker_neboa2		 				= {"cs_medium_outfit", "helm_hardhat"},
 stalker_nebob2 		 				= {"cs_medium_outfit"},
 stalker_trader_nebo 		 		= {"cs_light_novice_outfit"},
 
----- «Сталкеры» ----
 ------ Loners ------
 loner_mechanic_stalker				= {"stalker_outfit"},
 stalker_bar_security				= {"banditmerc_outfit"},
@@ -423,7 +411,6 @@ stalker_neytral_rukzak_3 			= {"stalker_outfit"},
 stalker_nimble 						= {"novice_outfit"},
 stalker_prizrak 					= {"stalker_outfit"},
 
------ «Военные» -----
 ----- Military ------
 stalker_military_exo 				= {"military_exo_outfit"},
 stalker_skat9m 						= {"military_outfit"},
@@ -468,7 +455,6 @@ stalker_soldier5i_beret 			= {"military_outfit"},
 stalker_soldier5j_beret 			= {"military_outfit"},
 stalker_soldier5k_beret 			= {"military_outfit"},
 
------ Зомби -----
 ---- Zombies ----
 stalker_zombied_1 					= {"novice_outfit"},
 stalker_zombied_1_face1 			= {"novice_outfit"},
@@ -598,7 +584,7 @@ stalker_zombied4i_face1 			= {"svoboda_exo_outfit"},
 stalker_zombied4i_face2 			= {"svoboda_exo_outfit"},
 }
 
--- Умер сталкер
+-- When npc dies
 function npc_on_death(npc)
 	local rnd_value = math.random(1,99)
 	if rnd_value > dropchance then return end -- if drop chance higher than random value between 1,99 exit
@@ -624,7 +610,6 @@ function npc_on_death(npc)
 	end
 end
 
--- Получим секцию брони и шлема
 -- get outfit and helmet based on the visual name
 function get_outfit_sections(visual)
 	local s_name = alun_utils.str_explode(visual,"\\") -- split outfit name by \\
@@ -635,7 +620,7 @@ function get_outfit_sections(visual)
 	end
 end
 
--- update
+-- update npc outfit conditions
 function update_outfit(rank_mult) -- updating outfit armor
 	local function actor_on_update()
 		local param = false
@@ -680,7 +665,6 @@ function update_helmet(rank_mult) -- updating outfit armor
 RegisterScriptCallback("actor_on_update",actor_on_update) -- register callback
 end
 
---утилиты
 -- generate a random condition value
 function mean_random(index_min,index_max,mean_index,left_power,right_power,flag) 
 	local index_mean = mean_index or 0.5 

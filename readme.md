@@ -85,7 +85,6 @@ cs_heavy_outfit = true
 ecolog_guard_outfit = true
 helm_tactic = true
 svoboda_heavy_outfit = true
-cs_exo_outfit = true
 ```
 
 How to add new outfits:
