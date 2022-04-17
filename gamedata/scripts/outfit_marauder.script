@@ -101,6 +101,7 @@ local visuals = {
 	stalker_bandita3   					= {"bandit_novice_outfit"},
 
 	----- Duty -----
+	stalker_do_balon_1					= {"dolg_outfit"},
 	stalker_do_balon_3					= {"dolg_outfit"},
 	stalker_do_komandir					= {"dolg_outfit"},
 	stalker_dolg_0		 				= {"dolg_novice_outfit"},
