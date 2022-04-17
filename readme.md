@@ -3,12 +3,12 @@
     -- Author: Shoker
     -- CoM visuals table: ziken
     -- CoM script adaptation: Dimeyne
-    -- Ñíÿòèå áðîíè ñ òðóïîâ.
-    -- CoC 1.4.22 adaptation: RenanMsV
+    -- ?????? ????? ? ??????.
+    -- CoC 1.5R6 adaptation: RenanMsV
     ----------------------
 
 The addon makes it possible to pick up armors and helmets when looting NPC corpses.The state of things depends on the faction and rank of the deceased.
-For Call of Chernobyl 1.4.22
+For Call of Chernobyl 1.5R6
 
 How to config this mod (change drop chance etc...):
 
@@ -42,6 +42,8 @@ Item conditions based by the NPC rank (novice, experienced, legend) are enabled 
 How to install :
 
 Copy and replace this mod's gamedata folder into your game's gamedata folder.
+If you dont use any outfit mod you are good to go, you can play the game without any extra step.
+
 For this mod to work with mods that change the gamedata/configs/misc/death_generic.ltx file you need to add those lines to this file (in the [keep_items] section):
 
 ```ini
